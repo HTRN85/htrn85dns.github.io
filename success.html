@@ -2,212 +2,233 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
-    <!-- SECURITY HEADERS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="X-Frame-Options" content="DENY">
-    <meta http-equiv="Permissions-Policy" content="accelerometer=(), camera=(), geolocation=(), microphone=()">
     <title>Purchase Complete - HTRN85 DNS Security</title>
-    
-    <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <!-- Custom CSS -->
     <link href="css/style.css" rel="stylesheet">
     <link href="css/success.css" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #f8f9fa; }
+        .success-hero {
+            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+            color: white;
+            padding: 80px 0 60px;
+            text-align: center;
+        }
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 3rem;
+        }
+        .key-display {
+            background: #fff;
+            border: 3px dashed #0d6efd;
+            border-radius: 12px;
+            padding: 24px;
+            font-family: monospace;
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            color: #0d6efd;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .key-display:hover { background: #f0f4ff; }
+        .step-badge {
+            width: 44px; height: 44px;
+            background: #0d6efd; color: white;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+        .next-step { display: flex; align-items: flex-start; gap: 16px; padding: 20px 0; border-bottom: 1px solid #e9ecef; }
+        .next-step:last-child { border-bottom: none; }
+    </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+    <!-- Success Header -->
+    <div class="success-hero">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="index.html">
-                <i class="fas fa-shield-alt text-primary"></i> HTRN85 DNS
-            </a>
+            <div class="success-icon">
+                <i class="fas fa-check"></i>
+            </div>
+            <h1 class="display-4 fw-bold mb-3">Purchase Complete!</h1>
+            <p class="lead mb-0 opacity-75">Your activation key has been sent to your email address.</p>
         </div>
-    </nav>
+    </div>
 
-    <!-- Success Content -->
-    <div class="success-container">
-        <div class="container py-5">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    
-                    <!-- Success Icon -->
-                    <div class="text-center mb-5">
-                        <div class="success-icon">
-                            <i class="fas fa-check-circle"></i>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+
+                <!-- Activation Key Card -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body p-4">
+                        <h4 class="fw-bold mb-1"><i class="fas fa-key text-warning me-2"></i>Your Activation Key</h4>
+                        <p class="text-muted mb-3">Keep this key safe — you'll need it to deploy protection to your computers.</p>
+
+                        <div class="key-display" id="activationKey" onclick="copyKey()" title="Click to copy">
+                            <span id="keyText">Loading...</span>
                         </div>
-                        <h1 class="display-4 fw-bold mb-3">Welcome to HTRN85 DNS!</h1>
-                        <p class="lead text-muted">Your payment was successful. Let's get you protected!</p>
+                        <div class="text-center mt-2">
+                            <small class="text-muted"><i class="fas fa-copy me-1"></i>Click key to copy</small>
+                            <span id="copyConfirm" class="text-success ms-2" style="display:none;"><i class="fas fa-check-circle me-1"></i>Copied!</span>
+                        </div>
+
+                        <div class="row mt-4 g-3" id="orderDetails"></div>
                     </div>
+                </div>
 
-                    <!-- Activation Code Card -->
-                    <div class="activation-card mb-4">
-                        <div class="card-header">
-                            <h4 class="mb-0"><i class="fas fa-key text-warning"></i> Your Activation Code</h4>
-                        </div>
-                        <div class="card-body text-center">
-                            <p class="text-muted mb-3">Save this code - you'll need it to activate your clients</p>
-                            <div class="activation-code-display" id="activationCodeDisplay">
-                                <div class="code-value" id="activationCode">HTRN-XXXX-XXXX-XXXX</div>
-                                <button class="btn btn-outline-primary mt-3" onclick="copyActivationCode()">
-                                    <i class="fas fa-copy"></i> Copy Code
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                <!-- Next Steps -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body p-4">
+                        <h4 class="fw-bold mb-4"><i class="fas fa-rocket text-primary me-2"></i>What Happens Next</h4>
 
-                    <!-- Next Steps -->
-                    <div class="next-steps-card mb-4">
-                        <div class="card-header">
-                            <h4 class="mb-0"><i class="fas fa-list-check text-success"></i> Next Steps</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="step-item">
-                                <div class="step-icon bg-primary">1</div>
-                                <div class="step-content">
-                                    <h5 class="fw-bold mb-2">Check Your Email</h5>
-                                    <p class="text-muted mb-0">
-                                        We've sent your activation code and login credentials to 
-                                        <strong id="customerEmail">your email</strong>
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div class="step-item">
-                                <div class="step-icon bg-success">2</div>
-                                <div class="step-content">
-                                    <h5 class="fw-bold mb-2">Access Your Company Portal</h5>
-                                    <p class="text-muted mb-2">Login to your customized dashboard:</p>
-                                    <a href="/portal/login" class="btn btn-outline-success">
-                                        <i class="fas fa-sign-in-alt"></i> Go to Portal
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="step-item">
-                                <div class="step-icon bg-info">3</div>
-                                <div class="step-content">
-                                    <h5 class="fw-bold mb-2">Download Client Installer</h5>
-                                    <p class="text-muted mb-2">
-                                        Get the customized installer for <strong id="companyName">your company</strong>:
-                                    </p>
-                                    <button class="btn btn-info" onclick="downloadInstaller()">
-                                        <i class="fas fa-download"></i> Download setup.exe
-                                    </button>
-                                    <p class="small text-muted mt-2 mb-0">
-                                        Pre-configured with your activation code
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div class="step-item">
-                                <div class="step-icon bg-warning">4</div>
-                                <div class="step-content">
-                                    <h5 class="fw-bold mb-2">Deploy to Your Team</h5>
-                                    <p class="text-muted mb-2">
-                                        Share the installer with employees. They simply:
-                                    </p>
-                                    <ul class="deployment-list">
-                                        <li>Click the installer link</li>
-                                        <li>Watch the progress bar</li>
-                                        <li>See "Installation Complete"</li>
-                                        <li>Instantly protected!</li>
-                                    </ul>
-                                </div>
+                        <div class="next-step">
+                            <div class="step-badge">1</div>
+                            <div>
+                                <h6 class="fw-bold mb-1">Check Your Email</h6>
+                                <p class="text-muted mb-0">A confirmation email with your activation key and setup instructions has been sent to your inbox. Check your spam folder if it doesn't arrive within 5 minutes.</p>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Purchase Summary -->
-                    <div class="summary-card">
-                        <div class="card-header">
-                            <h4 class="mb-0"><i class="fas fa-receipt text-primary"></i> Purchase Summary</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="summary-item">
-                                        <label>Company:</label>
-                                        <value id="summaryCompany">-</value>
-                                    </div>
-                                    <div class="summary-item">
-                                        <label>Contact:</label>
-                                        <value id="summaryContact">-</value>
-                                    </div>
-                                    <div class="summary-item">
-                                        <label>Email:</label>
-                                        <value id="summaryEmail">-</value>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="summary-item">
-                                        <label>Plan:</label>
-                                        <value id="summaryPlan">-</value>
-                                    </div>
-                                    <div class="summary-item">
-                                        <label>Clients:</label>
-                                        <value id="summaryClients">-</value>
-                                    </div>
-                                    <div class="summary-item">
-                                        <label>Amount Paid:</label>
-                                        <value class="text-success fw-bold" id="summaryAmount">$0</value>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="text-center mt-4">
-                                <button class="btn btn-outline-secondary" onclick="window.print()">
-                                    <i class="fas fa-print"></i> Print Receipt
-                                </button>
+                        <div class="next-step">
+                            <div class="step-badge">2</div>
+                            <div>
+                                <h6 class="fw-bold mb-1">Download the Installer</h6>
+                                <p class="text-muted mb-0">Your email contains a download link for the DNS Security installer. Share this link with your employees or IT team.</p>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Help Section -->
-                    <div class="help-section text-center mt-5">
-                        <h5 class="fw-bold mb-3">Need Help Getting Started?</h5>
-                        <p class="text-muted mb-4">Our team is here to help you deploy successfully</p>
-                        <div class="row g-3 justify-content-center">
-                            <div class="col-md-4">
-                                <a href="/docs/quick-start.html" class="help-card">
-                                    <i class="fas fa-book fa-2x text-primary mb-2"></i>
-                                    <h6 class="fw-bold">Quick Start Guide</h6>
-                                </a>
+                        <div class="next-step">
+                            <div class="step-badge">3</div>
+                            <div>
+                                <h6 class="fw-bold mb-1">Deploy to Your Computers</h6>
+                                <p class="text-muted mb-0">Run the installer on each computer. When prompted, enter your activation key. Protection is active instantly after install.</p>
                             </div>
-                            <div class="col-md-4">
-                                <a href="/docs/video-tutorials.html" class="help-card">
-                                    <i class="fas fa-video fa-2x text-success mb-2"></i>
-                                    <h6 class="fw-bold">Video Tutorials</h6>
-                                </a>
-                            </div>
-                            <div class="col-md-4">
-                                <a href="/contact.html" class="help-card">
-                                    <i class="fas fa-headset fa-2x text-info mb-2"></i>
-                                    <h6 class="fw-bold">Contact Support</h6>
-                                </a>
+                        </div>
+                        <div class="next-step">
+                            <div class="step-badge">4</div>
+                            <div>
+                                <h6 class="fw-bold mb-1">Monitor Your Dashboard</h6>
+                                <p class="text-muted mb-0">Log in to your company portal to view real-time protection stats, manage blocked sites, and track all roaming clients.</p>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- Support -->
+                <div class="card shadow-sm border-0 bg-light mb-4">
+                    <div class="card-body p-4 text-center">
+                        <h5 class="fw-bold mb-2">Need Help?</h5>
+                        <p class="text-muted mb-3">Our support team is available to help you get set up quickly.</p>
+                        <a href="mailto:support@htrn85dns.com" class="btn btn-outline-primary me-2">
+                            <i class="fas fa-envelope me-2"></i>Email Support
+                        </a>
+                        <a href="index.html" class="btn btn-outline-secondary">
+                            <i class="fas fa-home me-2"></i>Back to Home
+                        </a>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="footer py-4 bg-light">
-        <div class="container text-center">
-            <p class="text-muted mb-0">&copy; 2024 HTRN85 DNS Security. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Custom JS -->
-    <script src="js/success.js"></script>
+    <script>
+        'use strict';
+
+        function copyKey() {
+            const key = document.getElementById('keyText').textContent;
+            if (!key || key === 'Loading...') return;
+            navigator.clipboard.writeText(key).then(() => {
+                const confirm = document.getElementById('copyConfirm');
+                confirm.style.display = 'inline';
+                setTimeout(() => { confirm.style.display = 'none'; }, 2000);
+            }).catch(() => {
+                // Fallback for older browsers
+                const el = document.createElement('textarea');
+                el.value = key;
+                document.body.appendChild(el);
+                el.select();
+                document.execCommand('copy');
+                document.body.removeChild(el);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                const raw = sessionStorage.getItem('purchaseResult');
+                if (!raw) {
+                    document.getElementById('keyText').textContent = 'Check your email for your activation key';
+                    return;
+                }
+
+                const result = JSON.parse(raw);
+
+                if (result.activationCode) {
+                    document.getElementById('keyText').textContent = result.activationCode;
+                }
+
+                const details = document.getElementById('orderDetails');
+                const items = [
+                    { label: 'Plan', value: result.planName || '—', icon: 'fa-tag' },
+                    { label: 'Max Clients', value: result.maxClients ?? '—', icon: 'fa-laptop' },
+                    { label: 'Valid Until', value: result.expiryDate ? new Date(result.expiryDate).toLocaleDateString() : '—', icon: 'fa-calendar' },
+                    { label: 'Company ID', value: result.companyId || '—', icon: 'fa-building' }
+                ];
+
+                details.innerHTML = items.map(item => `
+                    <div class="col-sm-6">
+                        <div class="p-3 bg-light rounded">
+                            <small class="text-muted d-block"><i class="fas ${item.icon} me-1"></i>${item.label}</small>
+                            <strong>${item.value}</strong>
+                        </div>
+                    </div>
+                `).join('');
+
+                // Show portal and installer links if available
+                if (result.portalUrl || result.installerDownloadUrl) {
+                    const actionDiv = document.createElement('div');
+                    actionDiv.className = 'row mt-3 g-2';
+                    if (result.installerDownloadUrl) {
+                        actionDiv.innerHTML += `
+                            <div class="col-sm-6">
+                                <a href="${result.installerDownloadUrl}" class="btn btn-primary w-100">
+                                    <i class="fas fa-download me-2"></i>Download Installer
+                                </a>
+                            </div>`;
+                    }
+                    if (result.portalUrl) {
+                        actionDiv.innerHTML += `
+                            <div class="col-sm-6">
+                                <a href="${result.portalUrl}" class="btn btn-success w-100">
+                                    <i class="fas fa-tachometer-alt me-2"></i>Open Portal
+                                </a>
+                            </div>`;
+                    }
+                    details.parentElement.appendChild(actionDiv);
+                }
+
+                sessionStorage.removeItem('purchaseResult');
+            } catch (e) {
+                console.error('Error loading purchase result:', e);
+                document.getElementById('keyText').textContent = 'Check your email for your activation key';
+            }
+        });
+    </script>
 </body>
 </html>

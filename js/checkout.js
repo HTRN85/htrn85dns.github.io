@@ -18,8 +18,10 @@
 
 const CONFIG = Object.freeze({
     // Square PUBLIC Application ID only (safe for frontend)
-    SQUARE_APPLICATION_ID: 'sandbox-sq0idb-iCI2fHkkv8duhmXFqODQlg',
-    SQUARE_LOCATION_ID: 'LHWXACFQCFRTE',
+    // TODO: Replace with your PRODUCTION Square Application ID from https://developer.squareup.com/apps
+    SQUARE_APPLICATION_ID: 'YOUR_PRODUCTION_SQUARE_APP_ID',
+    // TODO: Replace with your PRODUCTION Square Location ID
+    SQUARE_LOCATION_ID: 'YOUR_PRODUCTION_SQUARE_LOCATION_ID',
 
     // Backend API endpoint (all sensitive operations happen here)
     API_BASE_URL: '/api',
@@ -685,11 +687,16 @@ const Payment = {
 
             if (response.success) {
                 // Store ONLY non-sensitive data for display on success page
-                sessionStorage.setItem('activationCode', response.activationCode);
-                sessionStorage.setItem('customerEmail', CheckoutState.customerInfo.email);
-                sessionStorage.setItem('companyName', CheckoutState.customerInfo.companyName);
-                sessionStorage.setItem('planName', CheckoutState.selectedPlan.name);
-                sessionStorage.setItem('planPrice', CheckoutState.selectedPlan.price.toString());
+                sessionStorage.setItem('purchaseResult', JSON.stringify({
+                    activationCode: response.activationCode,
+                    planName: CheckoutState.selectedPlan?.name,
+                    maxClients: CheckoutState.selectedPlan?.maxClients,
+                    expiryDate: response.expiryDate,
+                    portalUrl: response.portalUrl,
+                    installerDownloadUrl: response.installerDownloadUrl,
+                    companyId: response.companyId,
+                    message: response.message
+                }));
 
                 // Clear sensitive data
                 CheckoutState.customerInfo = null;
