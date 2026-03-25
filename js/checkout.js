@@ -704,7 +704,7 @@ const Payment = {
                 sessionStorage.removeItem('selectedPlan');
 
                 // Redirect to success page
-                window.location.href = '/success.html';
+                window.location.href = 'success.html';
             } else {
                 UIUtils.showAlert(response.error || 'Payment failed. Please try again.', 'danger');
             }

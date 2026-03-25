@@ -369,7 +369,7 @@ const LandingPage = {
             maxClients: Math.abs(maxClients)
         }));
 
-        window.location.href = '/checkout.html';
+        window.location.href = 'checkout.html';
     },
 
     /**
