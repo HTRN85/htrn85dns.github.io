@@ -177,14 +177,17 @@ const ApiClient = {
 
     /**
      * Process payment via backend
+     * Maps to: POST api/purchase/complete
      */
     async processPayment(paymentToken, customerInfo, plan) {
-        return this.request('/payments/process', {
+        return this.request('/purchase/complete', {
             method: 'POST',
             body: JSON.stringify({
-                paymentToken,
-                customer: customerInfo,
-                plan
+                email:       customerInfo.email,
+                companyName: customerInfo.companyName,
+                contactName: `${customerInfo.firstName} ${customerInfo.lastName}`.trim(),
+                planType:    plan.name,
+                paymentId:   paymentToken
             })
         });
     }
@@ -688,14 +691,13 @@ const Payment = {
             if (response.success) {
                 // Store ONLY non-sensitive data for display on success page
                 sessionStorage.setItem('purchaseResult', JSON.stringify({
-                    activationCode: response.activationCode,
-                    planName: CheckoutState.selectedPlan?.name,
-                    maxClients: CheckoutState.selectedPlan?.maxClients,
-                    expiryDate: response.expiryDate,
-                    portalUrl: response.portalUrl,
-                    installerDownloadUrl: response.installerDownloadUrl,
-                    companyId: response.companyId,
-                    message: response.message
+                    activationCode: response.activationKey,      // backend: activationKey
+                    planName:       response.planType            // backend: planType
+                                    || CheckoutState.selectedPlan?.name,
+                    maxClients:     response.maxComputers        // backend: maxComputers
+                                    || CheckoutState.selectedPlan?.maxClients,
+                    expiryDate:     response.expiryDate,
+                    message:        response.message
                 }));
 
                 // Clear sensitive data
