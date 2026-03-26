@@ -157,9 +157,9 @@ const UIUtils = {
 
         document.body.appendChild(toast);
 
-        // DISABLED: setTimeout(() => {
+        setTimeout(() => {
             toast.style.animation = 'fadeOut 0.3s ease';
-            // DISABLED: setTimeout(() => toast.remove(), 300);
+            setTimeout(() => toast.remove(), 300);
         }, 4000);
     }
 };
